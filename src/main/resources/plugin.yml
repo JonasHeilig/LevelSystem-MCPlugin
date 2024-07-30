@@ -1,0 +1,9 @@
+name: LevelSystem
+version: '1.0-SNAPSHOT'
+main: de.jonasheilig.levelSystem.LevelSystem
+api-version: '1.21'
+
+commands:
+  day:
+    description: Set the time to day
+    usage: /day
