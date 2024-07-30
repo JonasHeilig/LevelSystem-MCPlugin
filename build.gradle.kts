@@ -22,12 +22,27 @@ dependencies {
 }
 
 val targetJavaVersion = 21
+
 kotlin {
     jvmToolchain(targetJavaVersion)
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions.jvmTarget = "21"
+}
+
+tasks.shadowJar {
+    archiveClassifier.set("")
+    mergeServiceFiles()
+    manifest {
+        attributes(
+            "Main-Class" to "de.jonasheilig.levelSystem.LevelSystem"
+        )
+    }
+}
+
 tasks.build {
-    dependsOn("shadowJar")
+    dependsOn(tasks.shadowJar)
 }
 
 tasks.processResources {

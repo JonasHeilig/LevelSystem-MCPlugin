@@ -7,3 +7,6 @@ commands:
   day:
     description: Set the time to day
     usage: /day
+  fly:
+    description: Toggle flight mode
+    usage: /fly
