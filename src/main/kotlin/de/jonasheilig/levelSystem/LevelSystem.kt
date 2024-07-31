@@ -5,6 +5,7 @@ import de.jonasheilig.levelSystem.commands.GetLSItem
 import de.jonasheilig.levelSystem.commands.GetLSItemTabCompleter
 import de.jonasheilig.levelSystem.commands.SetDay
 import de.jonasheilig.levelSystem.listeners.BlockBreakListener
+import de.jonasheilig.levelSystem.items.CowSpawnerStick
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandExecutor
@@ -34,6 +35,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         // Register events
         Bukkit.getPluginManager().registerEvents(this, this)
         Bukkit.getPluginManager().registerEvents(BlockBreakListener(this), this)
+        Bukkit.getPluginManager().registerEvents(CowSpawnerStick, this)
         logger.info("LevelSystem enabled")
 
         loadStoneCounts()

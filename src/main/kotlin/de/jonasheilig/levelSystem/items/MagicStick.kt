@@ -13,6 +13,7 @@ object MagicStick {
         meta?.setDisplayName("Magic Stick")
 
         meta?.addEnchant(Enchantment.KNOCKBACK, 255, true)
+        meta?.addItemFlags(ItemFlag.HIDE_ENCHANTS)
 
 
         meta?.isUnbreakable = true
