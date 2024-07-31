@@ -1,5 +1,6 @@
 package de.jonasheilig.levelSystem.commands
 
+import de.jonasheilig.levelSystem.items.MagicStick
 import de.jonasheilig.levelSystem.items.StoneBreaker
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -13,6 +14,7 @@ class GetLSItem : CommandExecutor {
                 val itemName = args[0].lowercase()
                 val item = when (itemName) {
                     "stonebraker" -> StoneBreaker.create()
+                    "magicstick" -> MagicStick.create()
                     else -> {
                         sender.sendMessage("§cUnknown item. Please specify a valid custom item.")
                         return true

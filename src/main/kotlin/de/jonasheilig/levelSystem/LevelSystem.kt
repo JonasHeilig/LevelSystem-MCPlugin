@@ -1,6 +1,8 @@
 package de.jonasheilig.levelSystem
 
 import de.jonasheilig.levelSystem.commands.Fly
+import de.jonasheilig.levelSystem.commands.GetLSItem
+import de.jonasheilig.levelSystem.commands.GetLSItemTabCompleter
 import de.jonasheilig.levelSystem.commands.SetDay
 import de.jonasheilig.levelSystem.listeners.BlockBreakListener
 import org.bukkit.Bukkit
@@ -24,8 +26,12 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
 
     override fun onEnable() {
         saveDefaultConfig()
+        // Register commands
         getCommand("fly")?.setExecutor(Fly())
         getCommand("day")?.setExecutor(SetDay())
+        getCommand("get-ls")?.setExecutor(GetLSItem())
+        getCommand("get-ls")?.tabCompleter = GetLSItemTabCompleter()
+        // Register events
         Bukkit.getPluginManager().registerEvents(this, this)
         Bukkit.getPluginManager().registerEvents(BlockBreakListener(this), this)
         logger.info("LevelSystem enabled")
