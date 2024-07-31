@@ -11,7 +11,6 @@ import java.util.Random
 
 class BlockBreakListener(private val plugin: LevelSystem) : Listener {
     private val random = Random()
-    private val xpProbability = 0.6
 
     @EventHandler
     fun onBlockBreak(event: BlockBreakEvent) {
@@ -19,17 +18,29 @@ class BlockBreakListener(private val plugin: LevelSystem) : Listener {
             val player = event.player
             val playerUUID = player.uniqueId
 
-            val stoneCount = plugin.stoneCounts.getOrDefault(playerUUID, 0)
-            plugin.stoneCounts[playerUUID] = stoneCount + 1
+            val stoneCount = plugin.stoneCounts.getOrDefault(playerUUID, 0) + 1
+            plugin.stoneCounts[playerUUID] = stoneCount
 
-            val message = "You broke a stone block! Total: ${plugin.stoneCounts[playerUUID]}"
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(message))
+            val level = plugin.playerLevels.getOrDefault(playerUUID, 1)
+            val levelConfig = plugin.getStoneConfig(level)
+            val nextLevelConfig = plugin.getStoneConfig(level + 1)
+
+            if (nextLevelConfig != null && stoneCount >= nextLevelConfig["stone_required"] as Int) {
+                plugin.playerLevels[playerUUID] = level + 1
+                player.sendMessage("Congratulations! You've reached level ${level + 1}!")
+            }
+
+            val xpProbability = levelConfig?.get("xp_probability") as Double? ?: 0.0
+            val xpAmount = levelConfig?.get("xp_amount") as Int? ?: 0
 
             if (random.nextDouble() < xpProbability) {
-                val xpAmount = 10
                 player.giveExp(xpAmount)
                 player.sendMessage("You received $xpAmount XP!")
             }
+
+            val stonesToNextLevel = (nextLevelConfig?.get("stone_required") as Int? ?: stoneCount) - stoneCount
+            val message = "Level: ${plugin.playerLevels[playerUUID]}, Stones to next level: $stonesToNextLevel"
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(message))
         }
     }
 }

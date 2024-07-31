@@ -6,10 +6,10 @@ import de.jonasheilig.levelSystem.listeners.BlockBreakListener
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandExecutor
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.java.JavaPlugin
-import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.event.EventHandler
 import java.io.File
 import java.io.IOException
@@ -18,6 +18,7 @@ import java.util.UUID
 class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
 
     val stoneCounts = mutableMapOf<UUID, Int>()
+    val playerLevels = mutableMapOf<UUID, Int>()
     private val stoneFile = File(dataFolder, "stoneCounts.yml")
     private val stoneConfig = YamlConfiguration()
 
@@ -49,6 +50,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
                 for (key in stoneConfig.getKeys(false)) {
                     val uuid = UUID.fromString(key)
                     stoneCounts[uuid] = stoneConfig.getInt(key)
+                    playerLevels[uuid] = stoneConfig.getInt("$key.level", 1)
                 }
                 logger.info("Stone counts loaded successfully.")
             } catch (e: IOException) {
@@ -63,11 +65,16 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         try {
             for ((uuid, count) in stoneCounts) {
                 stoneConfig.set(uuid.toString(), count)
+                stoneConfig.set("$uuid.level", playerLevels[uuid])
             }
             stoneConfig.save(stoneFile)
             logger.info("Stone counts saved successfully.")
         } catch (e: IOException) {
             logger.severe("Could not save stone counts: ${e.message}")
         }
+    }
+
+    fun getStoneConfig(level: Int): Map<String, Any>? {
+        return config.getConfigurationSection("levels.$level")?.getValues(false)
     }
 }
