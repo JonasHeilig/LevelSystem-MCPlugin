@@ -10,3 +10,6 @@ commands:
   fly:
     description: Toggle flight mode
     usage: /fly
+  get-ls:
+    description: Get the LevelSystem item
+    usage: /get-ls <item_name>
