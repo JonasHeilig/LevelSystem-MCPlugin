@@ -13,10 +13,11 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.event.EventHandler
 import java.io.File
 import java.io.IOException
+import java.util.UUID
 
 class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
 
-    val stoneCounts = mutableMapOf<String, Int>()
+    val stoneCounts = mutableMapOf<UUID, Int>()
     private val stoneFile = File(dataFolder, "stoneCounts.yml")
     private val stoneConfig = YamlConfiguration()
 
@@ -46,7 +47,8 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
             try {
                 stoneConfig.load(stoneFile)
                 for (key in stoneConfig.getKeys(false)) {
-                    stoneCounts[key] = stoneConfig.getInt(key)
+                    val uuid = UUID.fromString(key)
+                    stoneCounts[uuid] = stoneConfig.getInt(key)
                 }
                 logger.info("Stone counts loaded successfully.")
             } catch (e: IOException) {
@@ -59,8 +61,8 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
 
     private fun saveStoneCounts() {
         try {
-            for ((key, value) in stoneCounts) {
-                stoneConfig.set(key, value)
+            for ((uuid, count) in stoneCounts) {
+                stoneConfig.set(uuid.toString(), count)
             }
             stoneConfig.save(stoneFile)
             logger.info("Stone counts saved successfully.")
