@@ -1,16 +1,16 @@
 package de.jonasheilig.levelSystem
 
 import de.jonasheilig.levelSystem.commands.*
+import de.jonasheilig.levelSystem.items.CowSpawnerStick
 import de.jonasheilig.levelSystem.listeners.*
-import de.jonasheilig.levelSystem.items.*
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandExecutor
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.java.JavaPlugin
-import org.bukkit.event.EventHandler
 import java.io.File
 import java.io.IOException
 import java.util.UUID
@@ -36,7 +36,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
     private val minerConfig = YamlConfiguration()
 
     override fun onEnable() {
-        // Update configuration files
+        // Load and update configuration files
         updateConfig("config_stone.yml")
         updateConfig("config_farm.yml")
         updateConfig("config_miner.yml")
@@ -47,12 +47,14 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         getCommand("get-ls")?.setExecutor(GetLSItem())
         getCommand("get-ls")?.tabCompleter = GetLSItemTabCompleter()
         getCommand("shop")?.setExecutor(ShopCommand(this))
+        getCommand("maxkelp")?.setExecutor(MaxKelpCommand(this))
 
         // Register events
         Bukkit.getPluginManager().registerEvents(this, this)
         Bukkit.getPluginManager().registerEvents(StoneListener(this), this)
         Bukkit.getPluginManager().registerEvents(FarmListener(this), this)
         Bukkit.getPluginManager().registerEvents(MinerListener(this), this)
+        Bukkit.getPluginManager().registerEvents(KelpPlaceListener(this), this)
         Bukkit.getPluginManager().registerEvents(CowSpawnerStick, this)
         Bukkit.getPluginManager().registerEvents(ShopCommand(this), this)
         Bukkit.getPluginManager().registerEvents(TeleportSwordListener(this), this)

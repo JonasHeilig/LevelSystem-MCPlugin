@@ -16,3 +16,11 @@ commands:
   shop:
     description: Open the shop
     usage: /shop
+  maxkelp:
+    description: Set the max kelp value for a player
+    usage: /<command> <player> <max kelp>
+
+permissions:
+  levelsystem.maxkelp:
+    description: Allows the player to use the /maxkelp command
+    default: op
