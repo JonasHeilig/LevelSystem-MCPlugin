@@ -1,13 +1,8 @@
 package de.jonasheilig.levelSystem
 
-import de.jonasheilig.levelSystem.commands.Fly
-import de.jonasheilig.levelSystem.commands.GetLSItem
-import de.jonasheilig.levelSystem.commands.GetLSItemTabCompleter
-import de.jonasheilig.levelSystem.commands.SetDay
-import de.jonasheilig.levelSystem.listeners.StoneListener
-import de.jonasheilig.levelSystem.listeners.FarmListener
-import de.jonasheilig.levelSystem.listeners.MinerListener
-import de.jonasheilig.levelSystem.items.CowSpawnerStick
+import de.jonasheilig.levelSystem.commands.*
+import de.jonasheilig.levelSystem.listeners.*
+import de.jonasheilig.levelSystem.items.*
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandExecutor
@@ -51,6 +46,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         getCommand("day")?.setExecutor(SetDay())
         getCommand("get-ls")?.setExecutor(GetLSItem())
         getCommand("get-ls")?.tabCompleter = GetLSItemTabCompleter()
+        getCommand("shop")?.setExecutor(ShopCommand(this))
 
         // Register events
         Bukkit.getPluginManager().registerEvents(this, this)
@@ -58,6 +54,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         Bukkit.getPluginManager().registerEvents(FarmListener(this), this)
         Bukkit.getPluginManager().registerEvents(MinerListener(this), this)
         Bukkit.getPluginManager().registerEvents(CowSpawnerStick, this)
+         Bukkit.getPluginManager().registerEvents(ShopCommand(this), this)
         logger.info("LevelSystem enabled")
 
         // Load data and configurations

@@ -13,3 +13,6 @@ commands:
   get-ls:
     description: Get the LevelSystem item
     usage: /get-ls <item_name>
+  shop:
+    description: Open the shop
+    usage: /shop
