@@ -3,6 +3,7 @@ package de.jonasheilig.levelSystem.commands
 import de.jonasheilig.levelSystem.items.CowSpawnerStick
 import de.jonasheilig.levelSystem.items.MagicStick
 import de.jonasheilig.levelSystem.items.StoneBreaker
+import de.jonasheilig.levelSystem.items.TeleportSword
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.command.Command
@@ -21,7 +22,8 @@ class ShopCommand(private val plugin: JavaPlugin) : CommandExecutor, Listener {
     private val shopItems = mapOf(
         "StoneBreaker" to Pair(StoneBreaker.create(), 50),
         "MagicStick" to Pair(MagicStick.create(), 200),
-        "CowSpawnerStick" to Pair(CowSpawnerStick.create(), 1000)
+        "CowSpawnerStick" to Pair(CowSpawnerStick.create(), 1000),
+        "TeleportSword" to Pair(TeleportSword.create(), 500),
     )
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {

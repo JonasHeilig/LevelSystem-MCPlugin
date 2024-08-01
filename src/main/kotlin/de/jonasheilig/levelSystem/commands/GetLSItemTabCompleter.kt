@@ -6,7 +6,7 @@ import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
 class GetLSItemTabCompleter : TabCompleter {
-    private val items = listOf("stonebreaker", "magicstick", "cowspawnerstick")
+    private val items = listOf("stonebreaker", "magicstick", "cowspawnerstick", "tp-sword")
 
     override fun onTabComplete(sender: CommandSender, command: Command, alias: String, args: Array<String>): List<String> {
         if (sender is Player) {

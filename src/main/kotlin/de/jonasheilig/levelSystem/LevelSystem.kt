@@ -54,7 +54,8 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         Bukkit.getPluginManager().registerEvents(FarmListener(this), this)
         Bukkit.getPluginManager().registerEvents(MinerListener(this), this)
         Bukkit.getPluginManager().registerEvents(CowSpawnerStick, this)
-         Bukkit.getPluginManager().registerEvents(ShopCommand(this), this)
+        Bukkit.getPluginManager().registerEvents(ShopCommand(this), this)
+        Bukkit.getPluginManager().registerEvents(TeleportSwordListener(), this)
         logger.info("LevelSystem enabled")
 
         // Load data and configurations

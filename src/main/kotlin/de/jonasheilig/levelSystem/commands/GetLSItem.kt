@@ -3,6 +3,7 @@ package de.jonasheilig.levelSystem.commands
 import de.jonasheilig.levelSystem.items.CowSpawnerStick
 import de.jonasheilig.levelSystem.items.MagicStick
 import de.jonasheilig.levelSystem.items.StoneBreaker
+import de.jonasheilig.levelSystem.items.TeleportSword
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -17,6 +18,7 @@ class GetLSItem : CommandExecutor {
                     "stonebraker" -> StoneBreaker.create()
                     "magicstick" -> MagicStick.create()
                     "cowspawnerstick" -> CowSpawnerStick.create()
+                    "tp-sword" -> TeleportSword.create()
                     else -> {
                         sender.sendMessage("§cUnknown item. Please specify a valid custom item.")
                         return true
