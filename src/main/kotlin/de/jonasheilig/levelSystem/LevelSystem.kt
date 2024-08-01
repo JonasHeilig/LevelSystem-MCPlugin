@@ -6,6 +6,7 @@ import de.jonasheilig.levelSystem.commands.GetLSItemTabCompleter
 import de.jonasheilig.levelSystem.commands.SetDay
 import de.jonasheilig.levelSystem.listeners.StoneListener
 import de.jonasheilig.levelSystem.listeners.FarmListener
+import de.jonasheilig.levelSystem.listeners.MinerListener
 import de.jonasheilig.levelSystem.items.CowSpawnerStick
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -33,10 +34,17 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
     private val farmConfigFile = File(dataFolder, "config_farm.yml")
     private val farmConfig = YamlConfiguration()
 
+    val minerCounts = mutableMapOf<UUID, Int>()
+    val minerLevels = mutableMapOf<UUID, Int>()
+    private val minerFile = File(dataFolder, "minerCounts.yml")
+    private val minerConfigFile = File(dataFolder, "config_miner.yml")
+    private val minerConfig = YamlConfiguration()
+
     override fun onEnable() {
         // Update configuration files
         updateConfig("config_stone.yml")
         updateConfig("config_farm.yml")
+        updateConfig("config_miner.yml")
 
         // Register commands
         getCommand("fly")?.setExecutor(Fly())
@@ -48,6 +56,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         Bukkit.getPluginManager().registerEvents(this, this)
         Bukkit.getPluginManager().registerEvents(StoneListener(this), this)
         Bukkit.getPluginManager().registerEvents(FarmListener(this), this)
+        Bukkit.getPluginManager().registerEvents(MinerListener(this), this)
         Bukkit.getPluginManager().registerEvents(CowSpawnerStick, this)
         logger.info("LevelSystem enabled")
 
@@ -56,11 +65,14 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         loadStoneConfig()
         loadFarmCounts()
         loadFarmConfig()
+        loadMinerCounts()
+        loadMinerConfig()
     }
 
     override fun onDisable() {
         saveStoneCounts()
         saveFarmCounts()
+        saveMinerCounts()
         logger.info("Thanks for using LevelSystem")
     }
 
@@ -165,6 +177,54 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         }
     }
 
+    private fun loadMinerCounts() {
+        if (minerFile.exists()) {
+            try {
+                minerConfig.load(minerFile)
+                for (key in minerConfig.getKeys(false)) {
+                    try {
+                        val uuid = UUID.fromString(key)
+                        minerCounts[uuid] = minerConfig.getInt(key)
+                    } catch (e: IllegalArgumentException) {
+                        logger.warning("Ignoring non-UUID key in minerCounts: $key")
+                    }
+                }
+                logger.info("Miner counts loaded successfully.")
+            } catch (e: IOException) {
+                logger.severe("Could not load miner counts: ${e.message}")
+            } catch (e: org.bukkit.configuration.InvalidConfigurationException) {
+                logger.severe("Could not load miner counts: ${e.message}")
+            }
+        }
+    }
+
+    private fun saveMinerCounts() {
+        try {
+            for ((uuid, count) in minerCounts) {
+                minerConfig.set(uuid.toString(), count)
+            }
+            minerConfig.save(minerFile)
+            logger.info("Miner counts saved successfully.")
+        } catch (e: IOException) {
+            logger.severe("Could not save miner counts: ${e.message}")
+        }
+    }
+
+    private fun loadMinerConfig() {
+        if (minerConfigFile.exists()) {
+            try {
+                minerConfig.load(minerConfigFile)
+                logger.info("Miner configuration loaded successfully.")
+            } catch (e: IOException) {
+                logger.severe("Could not load miner configuration: ${e.message}")
+            } catch (e: org.bukkit.configuration.InvalidConfigurationException) {
+                logger.severe("Could not load miner configuration: ${e.message}")
+            }
+        } else {
+            logger.warning("Miner configuration file not found. Default values may be used.")
+        }
+    }
+
     private fun updateConfig(resource: String) {
         val file = File(dataFolder, resource)
         if (file.exists()) {
@@ -194,5 +254,9 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
 
     fun getFarmConfig(level: Int): Map<String, Any>? {
         return farmConfig.getConfigurationSection("levels.$level")?.getValues(false)
+    }
+
+    fun getMinerConfig(level: Int): Map<String, Any>? {
+        return minerConfig.getConfigurationSection("levels.$level")?.getValues(false)
     }
 }

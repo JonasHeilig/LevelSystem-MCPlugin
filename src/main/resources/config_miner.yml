@@ -1,0 +1,13 @@
+levels:
+  '1':
+    items_required: 0
+    xp_probability: 0.1
+    xp_amount: 2
+  '2':
+    items_required: 100
+    xp_probability: 0.15
+    xp_amount: 4
+  '3':
+    items_required: 200
+    xp_probability: 0.2
+    xp_amount: 6
