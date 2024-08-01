@@ -34,12 +34,15 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
     private val farmConfig = YamlConfiguration()
 
     override fun onEnable() {
-        saveDefaultConfig()
+        saveResource("config_stone.yml", false)
+        saveResource("config_farm.yml", false)
+
         // Register commands
         getCommand("fly")?.setExecutor(Fly())
         getCommand("day")?.setExecutor(SetDay())
         getCommand("get-ls")?.setExecutor(GetLSItem())
         getCommand("get-ls")?.tabCompleter = GetLSItemTabCompleter()
+
         // Register events
         Bukkit.getPluginManager().registerEvents(this, this)
         Bukkit.getPluginManager().registerEvents(StoneListener(this), this)
