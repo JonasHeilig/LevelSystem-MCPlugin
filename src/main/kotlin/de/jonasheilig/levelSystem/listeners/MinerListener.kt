@@ -32,15 +32,15 @@ class MinerListener(private val plugin: LevelSystem) : Listener {
             val player = event.player
             val playerUUID = player.uniqueId
 
-            val oreCount = plugin.stoneCounts.getOrDefault(playerUUID, 0) + 1
-            plugin.stoneCounts[playerUUID] = oreCount
+            val oreCount = plugin.minerCounts.getOrDefault(playerUUID, 0) + 1
+            plugin.minerCounts[playerUUID] = oreCount
 
-            val level = plugin.playerLevels.getOrDefault(playerUUID, 1)
-            val levelConfig = plugin.getStoneConfig(level)
-            val nextLevelConfig = plugin.getStoneConfig(level + 1)
+            val level = plugin.minerLevels.getOrDefault(playerUUID, 1)
+            val levelConfig = plugin.getMinerConfig(level)
+            val nextLevelConfig = plugin.getMinerConfig(level + 1)
 
             if (nextLevelConfig != null && oreCount >= nextLevelConfig["items_required"] as Int) {
-                plugin.playerLevels[playerUUID] = level + 1
+                plugin.minerLevels[playerUUID] = level + 1
                 player.sendMessage("${ChatColor.GOLD}Congratulations! You've reached mining level ${level + 1}!")
             }
 

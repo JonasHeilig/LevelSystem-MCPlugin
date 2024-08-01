@@ -1,5 +1,6 @@
 package de.jonasheilig.levelSystem.commands
 
+import de.jonasheilig.levelSystem.LevelSystem
 import de.jonasheilig.levelSystem.items.CowSpawnerStick
 import de.jonasheilig.levelSystem.items.MagicStick
 import de.jonasheilig.levelSystem.items.StoneBreaker
@@ -18,7 +19,7 @@ class GetLSItem : CommandExecutor {
                     "stonebraker" -> StoneBreaker.create()
                     "magicstick" -> MagicStick.create()
                     "cowspawnerstick" -> CowSpawnerStick.create()
-                    "tp-sword" -> TeleportSword.create()
+                    "tp-sword" -> TeleportSword.create(LevelSystem())
                     else -> {
                         sender.sendMessage("§cUnknown item. Please specify a valid custom item.")
                         return true

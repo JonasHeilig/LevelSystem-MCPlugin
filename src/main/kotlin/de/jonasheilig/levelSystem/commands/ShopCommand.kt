@@ -1,5 +1,6 @@
 package de.jonasheilig.levelSystem.commands
 
+import de.jonasheilig.levelSystem.LevelSystem
 import de.jonasheilig.levelSystem.items.CowSpawnerStick
 import de.jonasheilig.levelSystem.items.MagicStick
 import de.jonasheilig.levelSystem.items.StoneBreaker
@@ -23,7 +24,7 @@ class ShopCommand(private val plugin: JavaPlugin) : CommandExecutor, Listener {
         "StoneBreaker" to Pair(StoneBreaker.create(), 50),
         "MagicStick" to Pair(MagicStick.create(), 200),
         "CowSpawnerStick" to Pair(CowSpawnerStick.create(), 1000),
-        "TeleportSword" to Pair(TeleportSword.create(), 500),
+        "TeleportSword" to Pair(TeleportSword.create(LevelSystem()), 500),
     )
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
