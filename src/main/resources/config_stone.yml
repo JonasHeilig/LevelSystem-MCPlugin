@@ -1,0 +1,17 @@
+levels:
+  1:
+    stone_required: 50
+    xp_probability: 0.1
+    xp_amount: 2
+  2:
+    stone_required: 100
+    xp_probability: 0.25
+    xp_amount: 3
+  3:
+    stone_required: 300
+    xp_probability: 0.3
+    xp_amount: 5
+  4:
+    stone_required: 500
+    xp_probability: 0.3
+    xp_amount: 10
