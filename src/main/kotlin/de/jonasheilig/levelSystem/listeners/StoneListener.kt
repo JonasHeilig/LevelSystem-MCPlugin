@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import de.jonasheilig.levelSystem.LevelSystem
+import org.bukkit.ChatColor
 import java.util.UUID
 import java.util.Random
 
@@ -29,7 +30,7 @@ class StoneListener(private val plugin: LevelSystem) : Listener {
 
             if (nextLevelConfig != null && stoneCount >= nextLevelConfig["stone_required"] as Int) {
                 plugin.playerLevels[playerUUID] = level + 1
-                player.sendMessage("Congratulations! You've reached level ${level + 1}!")
+                player.sendMessage("${ChatColor.GOLD}Congratulations! You've reached level ${level + 1}!")
             }
 
             val xpProbability = levelConfig?.get("xp_probability") as Double? ?: 0.0
@@ -37,13 +38,13 @@ class StoneListener(private val plugin: LevelSystem) : Listener {
 
             if (random.nextDouble() < xpProbability) {
                 player.giveExp(xpAmount)
-                player.sendMessage("You received $xpAmount XP!")
+                // player.sendMessage("${ChatColor.GOLD}You received $xpAmount XP!")
             }
 
             val stonesRequiredCurrent = levelConfig?.get("stone_required") as Int? ?: 0
             val stonesRequiredNext = nextLevelConfig?.get("stone_required") as Int? ?: stonesRequiredCurrent
 
-            val message = "Level: $level | $stoneCount / $stonesRequiredNext Steine"
+            val message = "${ChatColor.DARK_GRAY}Stoner | Level: $level | $stoneCount / $stonesRequiredNext Steine"
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(message))
         }
     }

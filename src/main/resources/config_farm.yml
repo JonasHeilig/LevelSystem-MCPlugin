@@ -1,6 +1,6 @@
 levels:
   1:
-    items_required: 50
+    items_required: 0
     xp_probability: 0.1
     xp_amount: 2
   2:

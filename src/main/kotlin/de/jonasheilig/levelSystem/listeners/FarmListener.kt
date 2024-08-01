@@ -7,8 +7,7 @@ import org.bukkit.block.Block
 import org.bukkit.block.data.Ageable
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.block.Action
-import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.block.BlockBreakEvent
 import de.jonasheilig.levelSystem.LevelSystem
 import org.bukkit.ChatColor
 import java.util.Random
@@ -19,41 +18,38 @@ class FarmListener(private val plugin: LevelSystem) : Listener {
     private val farmMaterials = setOf(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.BEETROOTS)
 
     @EventHandler
-    fun onPlayerInteract(event: PlayerInteractEvent) {
-        val block = event.clickedBlock ?: return
+    fun onBlockBreak(event: BlockBreakEvent) {
+        val block = event.block
         val blockType = block.type
 
-        if (event.action == Action.RIGHT_CLICK_BLOCK && blockType in farmMaterials) {
-            if (isFullyGrown(block)) {
-                val player = event.player
-                val playerUUID = player.uniqueId
+        if (blockType in farmMaterials && isFullyGrown(block)) {
+            val player = event.player
+            val playerUUID = player.uniqueId
 
-                val farmCount = plugin.farmCounts.getOrDefault(playerUUID, 0) + 1
-                plugin.farmCounts[playerUUID] = farmCount
+            val farmCount = plugin.farmCounts.getOrDefault(playerUUID, 0) + 1
+            plugin.farmCounts[playerUUID] = farmCount
 
-                val level = plugin.farmLevels.getOrDefault(playerUUID, 1)
-                val levelConfig = plugin.getFarmConfig(level)
-                val nextLevelConfig = plugin.getFarmConfig(level + 1)
+            val level = plugin.farmLevels.getOrDefault(playerUUID, 1)
+            val levelConfig = plugin.getFarmConfig(level)
+            val nextLevelConfig = plugin.getFarmConfig(level + 1)
 
-                if (nextLevelConfig != null && farmCount >= nextLevelConfig["items_required"] as Int) {
-                    plugin.farmLevels[playerUUID] = level + 1
-                    player.sendMessage("${ChatColor.GOLD}Congratulations! You've reached farming level ${level + 1}!")
-                }
-
-                val xpProbability = levelConfig?.get("xp_probability") as Double? ?: 0.0
-                val xpAmount = levelConfig?.get("xp_amount") as Int? ?: 0
-
-                if (random.nextDouble() < xpProbability) {
-                    player.giveExp(xpAmount)
-                    player.sendMessage("${ChatColor.GOLD}You received $xpAmount XP!")
-                }
-
-                val itemsRequiredCurrent = levelConfig?.get("items_required") as Int? ?: 0
-                val itemsRequiredNext = nextLevelConfig?.get("items_required") as Int? ?: itemsRequiredCurrent
-
-                val message = "${ChatColor.GREEN}Farming Level: $level | $farmCount / $itemsRequiredNext Items"
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(message))
+            if (nextLevelConfig != null && farmCount >= nextLevelConfig["items_required"] as Int) {
+                plugin.farmLevels[playerUUID] = level + 1
+                player.sendMessage("${ChatColor.GOLD}Congratulations! You've reached farming level ${level + 1}!")
             }
+
+            val xpProbability = levelConfig?.get("xp_probability") as Double? ?: 0.0
+            val xpAmount = levelConfig?.get("xp_amount") as Int? ?: 0
+
+            if (random.nextDouble() < xpProbability) {
+                player.giveExp(xpAmount)
+                // player.sendMessage("${ChatColor.GOLD}You received $xpAmount XP!")
+            }
+
+            val itemsRequiredCurrent = levelConfig?.get("items_required") as Int? ?: 0
+            val itemsRequiredNext = nextLevelConfig?.get("items_required") as Int? ?: itemsRequiredCurrent
+            val message = "${ChatColor.GREEN}Farmer | Level: $level | $farmCount / $itemsRequiredNext Items"
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(message))
         }
     }
 

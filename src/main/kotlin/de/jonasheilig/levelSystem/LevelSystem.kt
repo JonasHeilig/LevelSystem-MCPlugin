@@ -34,8 +34,9 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
     private val farmConfig = YamlConfiguration()
 
     override fun onEnable() {
-        saveResource("config_stone.yml", false)
-        saveResource("config_farm.yml", false)
+        // Update configuration files
+        updateConfig("config_stone.yml")
+        updateConfig("config_farm.yml")
 
         // Register commands
         getCommand("fly")?.setExecutor(Fly())
@@ -50,6 +51,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         Bukkit.getPluginManager().registerEvents(CowSpawnerStick, this)
         logger.info("LevelSystem enabled")
 
+        // Load data and configurations
         loadStoneCounts()
         loadStoneConfig()
         loadFarmCounts()
@@ -72,9 +74,12 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
             try {
                 stoneConfig.load(stoneFile)
                 for (key in stoneConfig.getKeys(false)) {
-                    val uuid = UUID.fromString(key)
-                    stoneCounts[uuid] = stoneConfig.getInt(key)
-                    playerLevels[uuid] = stoneConfig.getInt("$key.level", 1)
+                    try {
+                        val uuid = UUID.fromString(key)
+                        stoneCounts[uuid] = stoneConfig.getInt(key)
+                    } catch (e: IllegalArgumentException) {
+                        logger.warning("Ignoring non-UUID key in stoneCounts: $key")
+                    }
                 }
                 logger.info("Stone counts loaded successfully.")
             } catch (e: IOException) {
@@ -89,7 +94,6 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         try {
             for ((uuid, count) in stoneCounts) {
                 stoneConfig.set(uuid.toString(), count)
-                stoneConfig.set("$uuid.level", playerLevels[uuid])
             }
             stoneConfig.save(stoneFile)
             logger.info("Stone counts saved successfully.")
@@ -118,9 +122,12 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
             try {
                 farmConfig.load(farmFile)
                 for (key in farmConfig.getKeys(false)) {
-                    val uuid = UUID.fromString(key)
-                    farmCounts[uuid] = farmConfig.getInt(key)
-                    farmLevels[uuid] = farmConfig.getInt("$key.level", 1)
+                    try {
+                        val uuid = UUID.fromString(key)
+                        farmCounts[uuid] = farmConfig.getInt(key)
+                    } catch (e: IllegalArgumentException) {
+                        logger.warning("Ignoring non-UUID key in farmCounts: $key")
+                    }
                 }
                 logger.info("Farm counts loaded successfully.")
             } catch (e: IOException) {
@@ -135,7 +142,6 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         try {
             for ((uuid, count) in farmCounts) {
                 farmConfig.set(uuid.toString(), count)
-                farmConfig.set("$uuid.level", farmLevels[uuid])
             }
             farmConfig.save(farmFile)
             logger.info("Farm counts saved successfully.")
@@ -156,6 +162,29 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
             }
         } else {
             logger.warning("Farm configuration file not found. Default values may be used.")
+        }
+    }
+
+    private fun updateConfig(resource: String) {
+        val file = File(dataFolder, resource)
+        if (file.exists()) {
+            val currentConfig = YamlConfiguration.loadConfiguration(file)
+            val defaultConfig = YamlConfiguration.loadConfiguration(getResource(resource)!!.reader())
+
+            for (key in defaultConfig.getKeys(true)) {
+                if (!currentConfig.contains(key)) {
+                    currentConfig.set(key, defaultConfig.get(key))
+                }
+            }
+
+            try {
+                currentConfig.save(file)
+                logger.info("$resource updated with new values.")
+            } catch (e: IOException) {
+                logger.severe("Could not update $resource: ${e.message}")
+            }
+        } else {
+            saveResource(resource, false)
         }
     }
 
