@@ -1,21 +1,27 @@
 package de.jonasheilig.levelSystem.items
 
 import org.bukkit.Material
-import org.bukkit.entity.EntityType
-import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.ItemMeta
+import org.bukkit.ChatColor
+import de.jonasheilig.levelSystem.LevelSystem
+import org.bukkit.entity.EntityType
+import org.bukkit.event.EventHandler
+import org.bukkit.event.player.PlayerInteractEvent
 
-object CowSpawnerStick : Listener {
-    fun create(): ItemStack {
+object CowSpawnerStick {
+    fun create(plugin: LevelSystem): ItemStack {
         val item = ItemStack(Material.STICK)
-        val meta = item.itemMeta
+        val meta: ItemMeta = item.itemMeta ?: return item
 
-        meta?.setDisplayName("§6Cow Spawner Stick")
-        meta?.isUnbreakable = true
-        meta?.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
+        meta.setDisplayName("${ChatColor.MAGIC}-${ChatColor.LIGHT_PURPLE}Cow Spawner Stick${ChatColor.MAGIC}-")
+        meta.isUnbreakable = true
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
+
+        val key = NamespacedKey(plugin, "cow_spawner_stick")
+        meta.persistentDataContainer.set(key, org.bukkit.persistence.PersistentDataType.BYTE, 1.toByte())
 
         item.itemMeta = meta
         item.amount = 1

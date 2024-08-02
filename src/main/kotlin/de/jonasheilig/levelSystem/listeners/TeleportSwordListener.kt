@@ -37,7 +37,7 @@ class TeleportSwordListener(private val plugin: LevelSystem) : Listener {
 
                 player.teleport(targetLocation)
                 noFallDamagePlayers.add(player)
-                player.addPotionEffect(PotionEffect(PotionEffectType.SLOW_FALLING, 200, 1)) // Feather Falling for 10 seconds
+                player.addPotionEffect(PotionEffect(PotionEffectType.SLOW_FALLING, 200, 1))
 
             } else {
                 player.sendMessage("§cNo safe location found for teleportation!")
