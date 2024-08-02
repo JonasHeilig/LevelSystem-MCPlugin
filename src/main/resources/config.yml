@@ -1,2 +1,6 @@
 maxKelp:
   default: 64
+daystick:
+  cooldown_minutes: 20
+nightstick:
+  cooldown_minutes: 20

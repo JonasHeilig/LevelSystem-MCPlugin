@@ -44,7 +44,7 @@ class KelpPlaceListener(private val plugin: LevelSystem) : Listener {
         if (event.block.type == Material.KELP) {
             val uuid = player.uniqueId
             val currentCount = kelpConfig.getInt(uuid.toString(), 0) - 1
-            kelpConfig.set(uuid.toString(), maxOf(currentCount, 0)) // Ensure count doesn't go below 0
+            kelpConfig.set(uuid.toString(), maxOf(currentCount, 0))
             saveKelpCounts()
 
             sendActionBar(player, "Kelp: $currentCount / ${getMaxKelp(player)}")

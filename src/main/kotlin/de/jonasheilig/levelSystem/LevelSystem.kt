@@ -40,6 +40,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         updateConfig("config_stone.yml")
         updateConfig("config_farm.yml")
         updateConfig("config_miner.yml")
+        saveDefaultConfig()
 
         // Register commands
         getCommand("fly")?.setExecutor(Fly())
@@ -57,6 +58,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         Bukkit.getPluginManager().registerEvents(TeleportSwordListener(this), this)
         Bukkit.getPluginManager().registerEvents(CowSpawnerStickListener(this), this)
         Bukkit.getPluginManager().registerEvents(DayStickListener(this), this)
+        Bukkit.getPluginManager().registerEvents(NightStickListener(this), this)
 
         logger.info("LevelSystem enabled")
 
