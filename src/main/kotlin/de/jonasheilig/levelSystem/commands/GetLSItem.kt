@@ -19,6 +19,8 @@ class GetLSItem(private val plugin: LevelSystem) : CommandExecutor {
                     "cowspawnerstick" -> CowSpawnerStick.create(plugin)
                     "tp-sword" -> TeleportSword.create(plugin)
                     "daystick" -> DayStick.create(plugin)
+                    "butchersword" -> ButcherSword.create(plugin)
+                    "extrawoolshears" -> ExtraWoolShears.create(plugin)
                     else -> {
                         sender.sendMessage("${ChatColor.RED}Unknown item. Please specify a valid custom item.")
                         return true

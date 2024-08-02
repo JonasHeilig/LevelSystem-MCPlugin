@@ -16,10 +16,13 @@ class ShopCommand(private val plugin: LevelSystem) : CommandExecutor, Listener {
 
     private val shopItems = mapOf(
         "StoneBreaker" to Pair(StoneBreaker.create(plugin), 50),
-        "MagicStick" to Pair(MagicStick.create(plugin), 200),
+        "MagicStick" to Pair(MagicStick.create(plugin), 9999),
         "CowSpawnerStick" to Pair(CowSpawnerStick.create(plugin), 1000),
         "TeleportSword" to Pair(TeleportSword.create(plugin), 500),
-        "DayStick" to Pair(DayStick.create(plugin), 20000)
+        "DayStick" to Pair(DayStick.create(plugin), 20000),
+        "NightStick" to Pair(DayStick.create(plugin), 25000),
+        "Butcher" to Pair(ButcherSword.create(plugin), 150),
+        "WoolShears" to Pair(ExtraWoolShears.create(plugin),250)
     )
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
