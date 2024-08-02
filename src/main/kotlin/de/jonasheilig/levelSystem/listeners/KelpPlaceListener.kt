@@ -4,6 +4,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import de.jonasheilig.levelSystem.LevelSystem
 import net.md_5.bungee.api.chat.TextComponent
@@ -31,6 +32,19 @@ class KelpPlaceListener(private val plugin: LevelSystem) : Listener {
             val uuid = player.uniqueId
             val currentCount = kelpConfig.getInt(uuid.toString(), 0) + 1
             kelpConfig.set(uuid.toString(), currentCount)
+            saveKelpCounts()
+
+            sendActionBar(player, "Kelp: $currentCount / ${getMaxKelp(player)}")
+        }
+    }
+
+    @EventHandler
+    fun onBlockBreak(event: BlockBreakEvent) {
+        val player = event.player
+        if (event.block.type == Material.KELP) {
+            val uuid = player.uniqueId
+            val currentCount = kelpConfig.getInt(uuid.toString(), 0) - 1
+            kelpConfig.set(uuid.toString(), maxOf(currentCount, 0)) // Ensure count doesn't go below 0
             saveKelpCounts()
 
             sendActionBar(player, "Kelp: $currentCount / ${getMaxKelp(player)}")

@@ -8,12 +8,13 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import de.jonasheilig.levelSystem.LevelSystem
 import org.bukkit.ChatColor
+import java.util.UUID
 import java.util.Random
 
 class MinerListener(private val plugin: LevelSystem) : Listener {
     private val random = Random()
 
-    // Materials
+    // Materialien
     private val oreMaterials = setOf(
         Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE,
         Material.DIAMOND_ORE, Material.EMERALD_ORE, Material.LAPIS_ORE,
@@ -25,8 +26,7 @@ class MinerListener(private val plugin: LevelSystem) : Listener {
 
     @EventHandler
     fun onBlockBreak(event: BlockBreakEvent) {
-        val block = event.block
-        val blockType = block.type
+        val blockType = event.block.type
 
         if (blockType in oreMaterials) {
             val player = event.player
@@ -39,7 +39,7 @@ class MinerListener(private val plugin: LevelSystem) : Listener {
             val levelConfig = plugin.getMinerConfig(level)
             val nextLevelConfig = plugin.getMinerConfig(level + 1)
 
-            if (nextLevelConfig != null && oreCount >= nextLevelConfig["items_required"] as Int) {
+            if (nextLevelConfig != null && oreCount >= nextLevelConfig["ore_required"] as Int) {
                 plugin.minerLevels[playerUUID] = level + 1
                 player.sendMessage("${ChatColor.GOLD}Congratulations! You've reached mining level ${level + 1}!")
             }
@@ -52,9 +52,10 @@ class MinerListener(private val plugin: LevelSystem) : Listener {
                 // player.sendMessage("${ChatColor.GOLD}You received $xpAmount XP!")
             }
 
-            val itemsRequiredCurrent = levelConfig?.get("items_required") as Int? ?: 0
-            val itemsRequiredNext = nextLevelConfig?.get("items_required") as Int? ?: itemsRequiredCurrent
-            val message = "${ChatColor.DARK_GRAY}Miner | Level: $level | $oreCount / $itemsRequiredNext Ores"
+            val oresRequiredCurrent = levelConfig?.get("ore_required") as Int? ?: 0
+            val oresRequiredNext = nextLevelConfig?.get("ore_required") as Int? ?: oresRequiredCurrent
+
+            val message = "${ChatColor.DARK_GRAY}Miner | Level: $level | $oreCount / $oresRequiredNext Erze"
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(message))
         }
     }
