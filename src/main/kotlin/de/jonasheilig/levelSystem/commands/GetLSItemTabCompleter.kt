@@ -14,6 +14,7 @@ class GetLSItemTabCompleter : TabCompleter {
         "daystick",
         "butchersword",
         "extrawoolshears",
+        "fireworkstick",
     )
 
     override fun onTabComplete(sender: CommandSender, command: Command, alias: String, args: Array<String>): List<String> {

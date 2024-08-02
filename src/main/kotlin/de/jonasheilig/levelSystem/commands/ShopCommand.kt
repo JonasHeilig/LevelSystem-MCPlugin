@@ -22,7 +22,8 @@ class ShopCommand(private val plugin: LevelSystem) : CommandExecutor, Listener {
         "DayStick" to Pair(DayStick.create(plugin), 20000),
         "NightStick" to Pair(DayStick.create(plugin), 25000),
         "Butcher" to Pair(ButcherSword.create(plugin), 150),
-        "WoolShears" to Pair(ExtraWoolShears.create(plugin),250)
+        "WoolShears" to Pair(ExtraWoolShears.create(plugin),250),
+        "FireworkStick" to Pair(FireworkStick.create(plugin),100)
     )
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
