@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 import java.io.IOException
 import java.util.UUID
+import kotlin.concurrent.timer
 
 class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
 
@@ -55,6 +56,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         Bukkit.getPluginManager().registerEvents(KelpPlaceListener(this), this)
         Bukkit.getPluginManager().registerEvents(TeleportSwordListener(this), this)
         Bukkit.getPluginManager().registerEvents(CowSpawnerStickListener(this), this)
+        Bukkit.getPluginManager().registerEvents(DayStickListener(this), this)
 
         logger.info("LevelSystem enabled")
 

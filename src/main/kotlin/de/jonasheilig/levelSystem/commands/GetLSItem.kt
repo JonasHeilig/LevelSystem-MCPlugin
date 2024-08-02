@@ -1,10 +1,7 @@
 package de.jonasheilig.levelSystem.commands
 
 import de.jonasheilig.levelSystem.LevelSystem
-import de.jonasheilig.levelSystem.items.CowSpawnerStick
-import de.jonasheilig.levelSystem.items.MagicStick
-import de.jonasheilig.levelSystem.items.StoneBreaker
-import de.jonasheilig.levelSystem.items.TeleportSword
+import de.jonasheilig.levelSystem.items.*
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -21,6 +18,7 @@ class GetLSItem(private val plugin: LevelSystem) : CommandExecutor {
                     "magicstick" -> MagicStick.create(plugin)
                     "cowspawnerstick" -> CowSpawnerStick.create(plugin)
                     "tp-sword" -> TeleportSword.create(plugin)
+                    "daystick" -> DayStick.create(plugin)
                     else -> {
                         sender.sendMessage("${ChatColor.RED}Unknown item. Please specify a valid custom item.")
                         return true

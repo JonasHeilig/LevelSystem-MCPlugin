@@ -1,10 +1,7 @@
 package de.jonasheilig.levelSystem.commands
 
 import de.jonasheilig.levelSystem.LevelSystem
-import de.jonasheilig.levelSystem.items.CowSpawnerStick
-import de.jonasheilig.levelSystem.items.MagicStick
-import de.jonasheilig.levelSystem.items.StoneBreaker
-import de.jonasheilig.levelSystem.items.TeleportSword
+import de.jonasheilig.levelSystem.items.*
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
@@ -22,6 +19,7 @@ class ShopCommand(private val plugin: LevelSystem) : CommandExecutor, Listener {
         "MagicStick" to Pair(MagicStick.create(plugin), 200),
         "CowSpawnerStick" to Pair(CowSpawnerStick.create(plugin), 1000),
         "TeleportSword" to Pair(TeleportSword.create(plugin), 500),
+        "DayStick" to Pair(DayStick.create(plugin), 20000)
     )
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
