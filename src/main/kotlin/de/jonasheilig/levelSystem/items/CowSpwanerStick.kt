@@ -7,9 +7,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.ChatColor
 import de.jonasheilig.levelSystem.LevelSystem
-import org.bukkit.entity.EntityType
-import org.bukkit.event.EventHandler
-import org.bukkit.event.player.PlayerInteractEvent
 
 object CowSpawnerStick {
     fun create(plugin: LevelSystem): ItemStack {
@@ -26,17 +23,5 @@ object CowSpawnerStick {
         item.itemMeta = meta
         item.amount = 1
         return item
-    }
-
-    @EventHandler
-    fun onPlayerInteract(event: PlayerInteractEvent) {
-        val player = event.player
-        val item = player.inventory.itemInMainHand
-
-        if (item.itemMeta?.displayName == "§6Cow Spawner Stick" && event.action.name.contains("RIGHT_CLICK")) {
-            val location = player.location
-            player.world.spawnEntity(location, EntityType.COW)
-            event.isCancelled = true
-        }
     }
 }

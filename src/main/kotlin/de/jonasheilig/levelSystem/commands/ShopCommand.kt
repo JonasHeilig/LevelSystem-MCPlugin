@@ -6,7 +6,6 @@ import de.jonasheilig.levelSystem.items.MagicStick
 import de.jonasheilig.levelSystem.items.StoneBreaker
 import de.jonasheilig.levelSystem.items.TeleportSword
 import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -15,8 +14,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.inventory.Inventory
-import org.bukkit.inventory.ItemStack
 
 class ShopCommand(private val plugin: LevelSystem) : CommandExecutor, Listener {
 
@@ -37,7 +34,7 @@ class ShopCommand(private val plugin: LevelSystem) : CommandExecutor, Listener {
     private fun openShop(player: Player) {
         val inventory = Bukkit.createInventory(null, 9, "Shop")
 
-        for ((name, itemData) in shopItems) {
+        shopItems.forEach { (name, itemData) ->
             val (itemStack, price) = itemData
             val meta = itemStack.itemMeta
             meta?.lore = listOf("${ChatColor.BOLD}${ChatColor.BLUE}Price: ${ChatColor.GOLD}$price XP")

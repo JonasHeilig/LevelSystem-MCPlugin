@@ -1,7 +1,6 @@
 package de.jonasheilig.levelSystem
 
 import de.jonasheilig.levelSystem.commands.*
-import de.jonasheilig.levelSystem.items.CowSpawnerStick
 import de.jonasheilig.levelSystem.listeners.*
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -44,20 +43,19 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         // Register commands
         getCommand("fly")?.setExecutor(Fly())
         getCommand("day")?.setExecutor(SetDay())
-        getCommand("get-ls")?.setExecutor(GetLSItem())
+        getCommand("get-ls")?.setExecutor(GetLSItem(this))
         getCommand("get-ls")?.tabCompleter = GetLSItemTabCompleter()
         getCommand("shop")?.setExecutor(ShopCommand(this))
         getCommand("maxkelp")?.setExecutor(MaxKelpCommand(this))
 
         // Register events
-        Bukkit.getPluginManager().registerEvents(this, this)
         Bukkit.getPluginManager().registerEvents(StoneListener(this), this)
         Bukkit.getPluginManager().registerEvents(FarmListener(this), this)
         Bukkit.getPluginManager().registerEvents(MinerListener(this), this)
         Bukkit.getPluginManager().registerEvents(KelpPlaceListener(this), this)
-        Bukkit.getPluginManager().registerEvents(CowSpawnerStick, this)
-        Bukkit.getPluginManager().registerEvents(ShopCommand(this), this)
         Bukkit.getPluginManager().registerEvents(TeleportSwordListener(this), this)
+        Bukkit.getPluginManager().registerEvents(CowSpawnerStickListener(this), this)
+
         logger.info("LevelSystem enabled")
 
         // Load data and configurations
@@ -85,7 +83,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         if (stoneFile.exists()) {
             try {
                 stoneConfig.load(stoneFile)
-                for (key in stoneConfig.getKeys(false)) {
+                stoneConfig.getKeys(false).forEach { key ->
                     try {
                         val uuid = UUID.fromString(key)
                         stoneCounts[uuid] = stoneConfig.getInt(key)
@@ -104,7 +102,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
 
     private fun saveStoneCounts() {
         try {
-            for ((uuid, count) in stoneCounts) {
+            stoneCounts.forEach { (uuid, count) ->
                 stoneConfig.set(uuid.toString(), count)
             }
             stoneConfig.save(stoneFile)
@@ -133,7 +131,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         if (farmFile.exists()) {
             try {
                 farmConfig.load(farmFile)
-                for (key in farmConfig.getKeys(false)) {
+                farmConfig.getKeys(false).forEach { key ->
                     try {
                         val uuid = UUID.fromString(key)
                         farmCounts[uuid] = farmConfig.getInt(key)
@@ -152,7 +150,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
 
     private fun saveFarmCounts() {
         try {
-            for ((uuid, count) in farmCounts) {
+            farmCounts.forEach { (uuid, count) ->
                 farmConfig.set(uuid.toString(), count)
             }
             farmConfig.save(farmFile)
@@ -181,7 +179,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
         if (minerFile.exists()) {
             try {
                 minerConfig.load(minerFile)
-                for (key in minerConfig.getKeys(false)) {
+                minerConfig.getKeys(false).forEach { key ->
                     try {
                         val uuid = UUID.fromString(key)
                         minerCounts[uuid] = minerConfig.getInt(key)
@@ -200,7 +198,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
 
     private fun saveMinerCounts() {
         try {
-            for ((uuid, count) in minerCounts) {
+            minerCounts.forEach { (uuid, count) ->
                 minerConfig.set(uuid.toString(), count)
             }
             minerConfig.save(minerFile)
@@ -231,7 +229,7 @@ class LevelSystem : JavaPlugin(), Listener, CommandExecutor {
             val currentConfig = YamlConfiguration.loadConfiguration(file)
             val defaultConfig = YamlConfiguration.loadConfiguration(getResource(resource)!!.reader())
 
-            for (key in defaultConfig.getKeys(true)) {
+            defaultConfig.getKeys(true).forEach { key ->
                 if (!currentConfig.contains(key)) {
                     currentConfig.set(key, defaultConfig.get(key))
                 }
